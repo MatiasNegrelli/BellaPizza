@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio de sesión - BellaPizza</title>
+    <link href="../src/output.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('./img/pizza-5163790_1280.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #333;
+        }
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center h-screen">
+    <div class="login-container p-8 sm:p-10 rounded-lg shadow-lg w-full max-w-sm">
+        <div class="text-center mb-6">
+            <img src="../img/logo.jfif" alt="Logo BellaPizza" class="w-32 mx-auto mb-4">
+            <h2 class="text-3xl font-bold text-gray-800">Inicio de sesión</h2>
+        </div>
+        
+        <form id="loginForm" class="space-y-6">
+            <div>
+                <label for="username" class="block text-gray-700 font-medium">Nombre de usuario</label>
+                <input type="text" id="username" class="w-full border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+            </div>
+            <div>
+                <label for="password" class="block text-gray-700 font-medium">Contraseña</label>
+                <input type="password" id="password" class="w-full border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+            </div>
+            <button type="button" onclick="login()" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300">Iniciar sesión</button>
+        </form>
+        
+        <p id="loginMessage" class="text-center text-red-500 mt-4"></p>
+    </div>
+
+    <script>
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const loginMessage = document.getElementById('loginMessage');
+
+            if (username === 'prueba999' && password === 'prueba111') {
+                window.location.href = './administrador.html';
+            } else {
+                loginMessage.textContent = 'Nombre de usuario o contraseña inválidos.';
+            }
+        }
+    </script>
+</body>
+</html>

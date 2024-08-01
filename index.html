@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservas BellaPizza</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('./img/pizza-5163790_1280.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            position: relative;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 0.5rem;
+        }
+        .logo {
+            max-width: 120px;
+            height: auto;
+        }
+        .logo-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+        }
+        .login-link {
+            z-index: 10;
+        }
+        .login-button {
+            background-color: #2563EB;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .login-button:hover {
+            background-color: #1D4ED8;
+        }
+        .title-container {
+            margin-top: 80px;
+        }
+        @media (max-width: 768px) {
+            .logo-container {
+                display: none;
+            }
+            .login-link-desktop {
+                display: none;
+            }
+            .title-container {
+                margin-top: 20px;
+            }
+        }
+        @media (min-width: 769px) {
+            .login-link-mobile {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen relative">
+    <div class="logo-container">
+        <img src="./img/logo.jfif" alt="Logo BellaPizza" class="logo">
+    </div>
+    <a href="./pages/login.html" class="login-link login-link-desktop absolute top-5 right-5">
+        <button class="login-button">Inicio de sesión de administrador</button>
+    </a>
+    <div class="container p-6 sm:p-8 rounded-lg shadow-md w-full max-w-lg">
+        <div class="text-center title-container">
+            <h2 class="text-2xl font-bold">Reservas BellaPizza</h2>
+        </div>
+        
+        <form id="reservationForm" class="space-y-4 mb-6">
+            <div>
+                <label for="date" class="block text-gray-700">Fecha</label>
+                <input type="date" id="date" class="w-full border-gray-300 rounded-md shadow-sm" required>
+            </div>
+            <div>
+                <label for="name" class="block text-gray-700">Nombre</label>
+                <input type="text" id="name" class="w-full border-gray-300 rounded-md shadow-sm" required>
+            </div>
+            <div>
+                <label for="surname" class="block text-gray-700">Apellido</label>
+                <input type="text" id="surname" class="w-full border-gray-300 rounded-md shadow-sm" required>
+            </div>
+            <div>
+                <label for="time" class="block text-gray-700">Hora de reserva</label>
+                <input type="time" id="time" class="w-full border-gray-300 rounded-md shadow-sm" required>
+            </div>
+            <div>
+                <label for="reason" class="block text-gray-700">Motivo de la reserva</label>
+                <select id="reason" class="w-full border-gray-300 rounded-md shadow-sm" required>
+                    <option value="" disabled selected>Selecciona un motivo</option>
+                    <option value="Cumpleaños">Cumpleaños</option>
+                    <option value="Reunión">Reunión</option>
+                    <option value="Otro">Otro</option>
+                </select>
+            </div>
+            <div>
+                <label for="people" class="block text-gray-700">Número de personas</label>
+                <select id="people" class="w-full border-gray-300 rounded-md shadow-sm" required>
+                    <option value="" disabled selected>Selecciona número de personas</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+            </div>
+            <button type="button" onclick="submitReservation()" class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-300">Reservar</button>
+        </form>
+        
+        <p id="message" class="text-center text-red-500 mb-4"></p>
+        
+        <div id="reservationsList" class="mt-4">
+            <h3 class="text-xl font-semibold mb-2">Reservas existentes</h3>
+            <ul id="reservations" class="list-disc pl-5 space-y-2"></ul>
+        </div>
+
+        <div class="login-link login-link-mobile flex justify-center mt-6">
+            <a href="./pages/login.html" class="login-button">Inicio de sesión de administrador</a>
+        </div>
+    </div>
+
+    <script>
+        const reservations = [
+            { date: '2024-08-10', time: '19:00', name: 'Matias', surname: 'Negrelli', reason: 'Cumpleaños', people: '4' },
+            { date: '2024-08-12', time: '20:00', name: 'Joaquin', surname: 'Venturelli', reason: 'Reunión', people: '2' }
+        ];
+
+        function submitReservation() {
+            const date = document.getElementById('date').value;
+            const name = document.getElementById('name').value;
+            const surname = document.getElementById('surname').value;
+            const time = document.getElementById('time').value;
+            const reason = document.getElementById('reason').value;
+            const people = document.getElementById('people').value;
+            const messageElement = document.getElementById('message');
+            const reservationsList = document.getElementById('reservations');
+
+            // Validaciones del input
+            if (!date || !name || !surname || !time || !reason || !people) {
+                messageElement.textContent = 'Por favor, completa todos los campos.';
+                return;
+            }
+
+            const now = new Date();
+            const reservationDate = new Date(`${date}T${time}`);
+            if (reservationDate < now) {
+                messageElement.textContent = 'Por favor, selecciona una fecha y hora futura.';
+                return;
+            }
+
+            const newReservation = { date, time, name, surname, reason, people };
+            if (reservations.some(r => r.date === date && r.time === time)) {
+                messageElement.textContent = '¡Este horario ya está reservado!';
+                return;
+            }
+
+            reservations.push(newReservation);
+            messageElement.textContent = '¡Reserva exitosa!';
+            document.getElementById('reservationForm').reset();
+            updateReservationsList();
+        }
+
+        function updateReservationsList() {
+            const reservationsList = document.getElementById('reservations');
+            reservationsList.innerHTML = '';
+            reservations.sort((a, b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`))
+                .forEach(reservation => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('mb-2');
+                    listItem.textContent = `${reservation.date} a las ${reservation.time} - ${reservation.name} ${reservation.surname} (${reservation.people} personas) - ${reservation.reason}`;
+                    reservationsList.appendChild(listItem);
+                });
+        }
+
+        updateReservationsList();
+    </script>
+</body>
+</html>
+
+
+
+
+
+
